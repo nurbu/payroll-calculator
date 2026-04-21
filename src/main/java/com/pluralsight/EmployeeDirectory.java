@@ -14,10 +14,14 @@ public class EmployeeDirectory {
         String employeeFilePath = scanner.nextLine();
         System.out.print("\nEnter the name of the payroll file to create: ");
         String payrollFilePath = scanner.nextLine();
+        String fileType = payrollFilePath.substring(payrollFilePath.indexOf('.'));
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(employeeFilePath));
-             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(payrollFilePath));) {
+             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(payrollFilePath))) {
 
             String line;
+            if (fileType.equals(".json")) {
+                bufferedWriter.write("[");
+            }
             // Goes line by line of the csv file
             while ((line = bufferedReader.readLine()) != null) {
                 // Takes the line and splits it and then places the info into an array.
@@ -28,12 +32,22 @@ public class EmployeeDirectory {
                 double payRate = Double.parseDouble(employeeData[3]);
                 Employee employee = new Employee(id, name, hoursWorked, payRate);
 
-                bufferedWriter.write(employee.getEmployeeId() + "|" + employee.getName() + "|" + employee.getGrossPay());
-                bufferedWriter.newLine();
+                if (fileType.equals(".csv")) {
+                    bufferedWriter.write(employee.getEmployeeId() + "|" + employee.getName() + "|" + employee.getGrossPay());
+                    bufferedWriter.newLine();
+                } else {
+                    bufferedWriter.write("{ \"id\": " + employee.getEmployeeId() + ", \"name\" : \"" + employee.getName() + "\", \"grossPay\" : " + employee.getGrossPay() + " },\n");
+                }
+
                 // System.out.printf("Id: " + employee.getEmployeeId() + "\nName: " + employee.getName() + "\nGross Pay: " + employee.getGrossPay() + "\n");
+
+            }
+            if (fileType.equals(".json")) {
+                bufferedWriter.write("]");
             }
 
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
