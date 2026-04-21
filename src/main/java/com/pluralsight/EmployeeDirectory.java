@@ -17,14 +17,17 @@ public class EmployeeDirectory {
         String fileType = payrollFilePath.substring(payrollFilePath.indexOf('.'));
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(employeeFilePath));
              BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(payrollFilePath))) {
-
+            boolean isFirstLine = true;
             String line;
             if (fileType.equals(".json")) {
-                bufferedWriter.write("[");
+                bufferedWriter.write("[\n");
             }
             // Goes line by line of the csv file
             while ((line = bufferedReader.readLine()) != null) {
                 // Takes the line and splits it and then places the info into an array.
+                if (!isFirstLine) {
+                    bufferedWriter.write(",");
+                }
                 String[] employeeData = line.split("\\|");
                 int id = Integer.parseInt(employeeData[0]);
                 String name = employeeData[1];
@@ -36,14 +39,14 @@ public class EmployeeDirectory {
                     bufferedWriter.write(employee.getEmployeeId() + "|" + employee.getName() + "|" + employee.getGrossPay());
                     bufferedWriter.newLine();
                 } else {
-                    bufferedWriter.write("{ \"id\": " + employee.getEmployeeId() + ", \"name\" : \"" + employee.getName() + "\", \"grossPay\" : " + employee.getGrossPay() + " },\n");
+                    bufferedWriter.write("{ \"id\": " + employee.getEmployeeId() + ", \"name\" : \"" + employee.getName() + "\", \"grossPay\" : " + employee.getGrossPay() + " }\n");
                 }
 
                 // System.out.printf("Id: " + employee.getEmployeeId() + "\nName: " + employee.getName() + "\nGross Pay: " + employee.getGrossPay() + "\n");
-
+                isFirstLine = false;
             }
             if (fileType.equals(".json")) {
-                bufferedWriter.write("]");
+                bufferedWriter.write("\n]");
             }
 
         } catch (
