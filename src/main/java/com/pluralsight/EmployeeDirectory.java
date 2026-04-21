@@ -53,5 +53,6 @@ public class EmployeeDirectory {
                 Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+        scanner.close();
     }
 }
