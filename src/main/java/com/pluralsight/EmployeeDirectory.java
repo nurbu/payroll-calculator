@@ -14,12 +14,10 @@ public class EmployeeDirectory {
         String employeeFilePath = scanner.nextLine();
         System.out.print("\nEnter the name of the payroll file to create: ");
         String payrollFilePath = scanner.nextLine();
-        try {
-            FileReader fileReader = new FileReader(employeeFilePath);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            String line;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(employeeFilePath));
+             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(payrollFilePath));) {
 
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(payrollFilePath));
+            String line;
             // Goes line by line of the csv file
             while ((line = bufferedReader.readLine()) != null) {
                 // Takes the line and splits it and then places the info into an array.
@@ -30,7 +28,8 @@ public class EmployeeDirectory {
                 double payRate = Double.parseDouble(employeeData[3]);
                 Employee employee = new Employee(id, name, hoursWorked, payRate);
 
-                
+                bufferedWriter.write(employee.getEmployeeId() + "|" + employee.getName() + "|" + employee.getGrossPay());
+                bufferedWriter.newLine();
                 // System.out.printf("Id: " + employee.getEmployeeId() + "\nName: " + employee.getName() + "\nGross Pay: " + employee.getGrossPay() + "\n");
             }
 
