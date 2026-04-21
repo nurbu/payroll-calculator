@@ -4,13 +4,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class EmployeeDirectory {
+    // Reads employees.csv and prints their information
     public static void main(String[] args) {
 
         try {
             FileReader fileReader = new FileReader("employees.csv");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
+            // Goes line by line of the csv file
             while ((line = bufferedReader.readLine()) != null) {
+                // Takes the line and splits it and then places the info into an array.
                 String[] employeeData = line.split("\\|");
                 int id = Integer.parseInt(employeeData[0]);
                 String name = employeeData[1];
